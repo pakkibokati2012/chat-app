@@ -31,11 +31,16 @@ io.on('connection', socket => {
     io.emit('message', 'A user has left!');
   });
 
-  socket.on('sendLocation', location => {
-    io.emit(
-      'message',
-      `https://google.com/maps?q=${location.latitude},${location.longitude}`
-    );
+  socket.on('sendLocation', (location, callback) => {
+    try {
+      io.emit(
+        'locationMessage',
+        `https://google.com/maps?q=${location.latitude},${location.longitude}`
+      );
+      callback();
+    } catch (error) {
+      callback(error);
+    }
   });
 });
 
